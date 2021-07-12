@@ -1,0 +1,17 @@
+# https://blog.csdn.net/weixin_44807848/article/details/108120323
+
+FROM mongo
+
+RUN mkdir -p ./home/mongodb && touch ./home/mongodb/.dbshell && chown -R 999:999 ./home/mongodb
+
+
+ENV WORKSPACE /usr/local/work
+ENV AUTO_RUN_DIR /docker-entrypoint-initdb.d
+ENV INSTALL_MONGO_SHELL mongo-setup.sh
+
+RUN mkdir -p $WORKSPACE
+
+COPY ./script/data/mongo/init/movie_srt $WORKSPACE/movie_srt
+COPY ./script/data/mongo/init/$INSTALL_MONGO_SHELL $AUTO_RUN_DIR/
+
+RUN chmod a+x $AUTO_RUN_DIR/$INSTALL_MONGO_SHELL
